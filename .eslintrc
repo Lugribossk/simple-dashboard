@@ -1,0 +1,40 @@
+{
+    "ecmaFeatures": {
+        "modules": true,
+        "jsx": true
+    },
+    "env": {
+        "browser": true,
+        "mocha": true,
+        "es6": true
+    },
+    "globals": {
+        "__filename": true,
+        "process": true
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        "no-underscore-dangle": 0,
+        "eol-last": 0,
+        "camelcase": 0,
+        "no-new": 0,
+
+        "no-throw-literal": 2,
+        "constructor-super": 2,
+        "no-this-before-super": 2,
+        "object-shorthand": [2, "methods"],
+
+        "react/jsx-quotes": [2, "double"],
+        "react/jsx-no-undef": 2,
+        "react/jsx-uses-react": 2,
+        "react/jsx-uses-vars": 2,
+        "react/no-did-mount-set-state": 2,
+        "react/no-did-update-set-state": 2,
+        "react/no-unknown-property": 2,
+        "react/react-in-jsx-scope": 2,
+        "react/self-closing-comp": 2,
+        "react/wrap-multilines": 2
+    }
+}

@@ -1,0 +1,66 @@
+@import "~bootstrap/less/bootstrap.less";
+@import "~bootswatch/darkly/variables.less";
+@import "~bootswatch/darkly/bootswatch.less";
+
+html,
+body,
+#main,
+.full-size {
+    height: 100%;
+    width: 100%;
+}
+
+.panel-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 5px 0 5px 5px;
+
+    &:last-of-type {
+        padding-right: 5px;
+    }
+}
+
+.panel-item {
+    h1 {
+        margin-left: 20px;
+    }
+}
+
+.status-container {
+    display: flex;
+    flex-wrap: wrap;
+    height: 100%;
+    align-items: stretch;
+
+}
+
+.status-item {
+    flex: 1 1 400px;
+    margin: 5px 5px 5px 5px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.status-item > div {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.progress {
+    height: 30px;
+    background-color: rgba(0, 0, 0, 0.2);
+
+    .progress-bar {
+        font-size: 13px;
+        line-height: 30px;
+    }
+}
+
+.alert a {
+    color: inherit;
+}
