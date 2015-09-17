@@ -1,8 +1,10 @@
 # simple-dashboard
-A straightforward static JS dashboard for system monitoring
 [![Circle CI](https://circleci.com/gh/Lugribossk/simple-dashboard.svg?style=shield)](https://circleci.com/gh/Lugribossk/simple-dashboard)
 [![Dependency Status](https://david-dm.org/Lugribossk/simple-dashboard.svg)](https://david-dm.org/Lugribossk/simple-dashboard)
 [![devDependency Status](https://david-dm.org/Lugribossk/simple-dashboard/dev-status.svg)](https://david-dm.org/Lugribossk/simple-dashboard#info=devDependencies)
+
+A straightforward dashboard for showing an overview of the status of servers and infrastructure.
+Runs entirely in the browser as static Javascript so it can be hosted easily without needing to set up and maintain yet another server. 
 
 ## Configuration
 
@@ -12,11 +14,37 @@ title|TODO
 sources|.
 panels|.
 
+### Example
 
+```json
+{
+    "sources": [{
+        "type": "statusio",
+        "title": "Tutum",
+        "link": "http://status.tutum.co",
+        "id": "536beeeafd254d60080002ae"
+    }, {
+        "type": "rss-aws",
+        "title": "CloudFront",
+        "id": "cloudfront"
+    }, {
+        "type": "rss-aws",
+        "title": "EC2 US East",
+        "id": "ec2-us-east-1"
+    }, {
+        "type": "dropwizard",
+        "title": "Production - Healthcheck",
+        "adminPath": "http://localhost:9090/admin"
+    }]
+}
+
+```
 
 ## Status sources
 
-### Any
+### General options
+Options for all the status sources.
+
 Name|Default|Description
 ---|---|---
 type||Which kind of source this is, must be one of the types listed below, e.g. `status-code` or `vso-branches`.
@@ -43,9 +71,9 @@ This is set by many build system that integrate with GitHub such as CircleCI.
 Name|Default|Description
 ---|---|---
 type||`github-branches`
-owner|None|Repository owner name, i.e. the user or organization the repo is located under.
-repo|None|Repository name.
-token|None|Personal access token.
+owner||Repository owner name, i.e. the user or organization the repo is located under.
+repo||Repository name.
+token||Personal access token.
 showStatus|false|Also show build status.
 
 ### Static message
@@ -55,7 +83,7 @@ Name|Default|Description
 ---|---|---
 type||`message`
 status|success|How the status indicator should look, either `success`, `warning`, `danger` or `info`.
-message|None|Message to display.
+message||Message to display.
 
 ### Amazon Web Services status
 One of the statuses from Amazon Web Services' [Service Health Dashboard](http://status.aws.amazon.com/).
@@ -63,7 +91,7 @@ One of the statuses from Amazon Web Services' [Service Health Dashboard](http://
 Name|Default|Description
 ---|---|---
 type||`rss-aws`
-id|None|ID of the status feed to follow as seen in the RSS link, e.g. `ec2-us-east-1`.
+id||ID of the status feed to follow as seen in the RSS link, e.g. `ec2-us-east-1`.
 
 ### Response status code
 Whether an arbitrary URL returned a successful status code. Any status code below 400 counts as successful.
@@ -73,7 +101,7 @@ Check that the server is set up to allow cross-origin requests.
 Name|Default|Description
 ---|---|---
 type||`status-code`
-url|None|URL to request and check response status code for.
+url||URL to request and check response status code for.
 link|url|Link when clicking on the status indicator.
 
 ### Status.io
@@ -82,8 +110,8 @@ Status from a service dashboard hosted by [Status.io](http://status.io). Many we
 Name|Default|Description
 ---|---|---
 type||`statusio`
-id|None|Status.io's ID for the service you want to check, e.g. `536beeeafd254d60080002ae` for Tutum. There doesn't seem to be an easy way to find this yourself, but you can probably get it by asking customer support for the service you want to check. 
-link|None|Link to the service's status page, e.g. ``http://status.tutum.co`.
+id||Status.io's ID for the service you want to check, e.g. `536beeeafd254d60080002ae` for Tutum. There doesn't seem to be an easy way to find this yourself, but you can probably get it by asking customer support for the service you want to check. 
+link||Link to the service's status page, e.g. ``http://status.tutum.co`.
 
 ### Tutum.co service
 Status of a [Tutum.co](http://tutum.co) service.
@@ -91,9 +119,9 @@ Status of a [Tutum.co](http://tutum.co) service.
 Name|Default|Description
 ---|---|---
 type||`tutum-service`
-id|None|Service ID.
-username|None|Tutum account username.
-apiKey|None|Tutum account API key.
+id||Service ID.
+username||Tutum account username.
+apiKey||Tutum account API key.
 
 ### Visual Studio Online branches
 All the branches of a Visual Studio Online Git repository. Also shows build status of the latest commit in each branch and pull requests to master.
