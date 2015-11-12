@@ -43,7 +43,7 @@ export default class VsoBase extends Source {
         var branchBuilds = _.filter(builds, {sourceBranch: "refs/heads/" + branchName});
 
         if (branchBuilds.length === 0) {
-            status = "warning";
+            status = "info";
             message = "No builds found for branch '" + branchName + "'";
         } else {
             var build = branchBuilds[0];

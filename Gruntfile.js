@@ -1,4 +1,5 @@
 /*global module, require, process*/
+/*eslint prefer-arrow-callback: 0, no-invalid-this: 0, object-curly-spacing: 0*/
 var webpack = require("webpack");
 var HtmlPlugin = require("html-webpack-plugin");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
@@ -196,9 +197,32 @@ module.exports = function (grunt) {
         dist: ["target/dist/*"]
     });
 
+    grunt.loadNpmTasks("grunt-aws");
+    grunt.config.set("s3", {
+        options: {
+            accessKeyId: "",
+            secretAccessKey: "",
+            region: "us-east-1",
+            bucket: ""
+        },
+        upload: {
+            files: [{
+                cwd: "target/dist/",
+                src: "**",
+                dest: "status/"
+            }, {
+                cwd: "src/",
+                src: "config.json",
+                dest: "status/"
+            }]
+        }
+    });
+
+
     grunt.registerTask("dev", ["webpack-dev-server:start"]);
     grunt.registerTask("test", ["eslint:dev", "jscs:dev", "mochaTest:dev"]);
     grunt.registerTask("build", ["clean:dist", "webpack:build"]);
+    grunt.registerTask("upload", ["s3:upload"]);
 
     grunt.registerTask("ci", ["eslint:ci", "jscs:ci", "mochaTest:ci", "build"]);
 };

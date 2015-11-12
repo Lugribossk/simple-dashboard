@@ -49,7 +49,7 @@ export default class Store {
     _trigger(name, ...data) {
         if (this.listeners[name]) {
             _.forEach(this.listeners[name], listener => {
-                listener.apply(null, data);
+                listener(...data);
             });
         }
     }

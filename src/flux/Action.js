@@ -20,7 +20,7 @@ export default class Action {
         var me = this;
         function triggerAction(...args) {
             _.forEach(me.listeners, listener => {
-                listener.apply(null, args);
+                listener(...args);
             });
         }
 

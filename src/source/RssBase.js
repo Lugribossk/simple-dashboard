@@ -9,7 +9,7 @@ request.Request.prototype.jsonp = function (name = "callback") {
         delete window[this.callbackFunctionName];
         document.getElementsByTagName("head")[0].removeChild(this.scriptElement);
 
-        this.callback.apply(this, [null, {body: data}]);
+        this.callback(null, {body: data});
     };
     return this;
 };

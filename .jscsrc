@@ -33,8 +33,5 @@
     //"disallowParenthesesAroundArrowParam": true,
     //"requireArrowFunctions": true,
 
-    "maximumLineLength": 200,
-
-    "esprima": "esprima-fb",
     "esnext": true
 }

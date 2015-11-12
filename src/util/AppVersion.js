@@ -10,7 +10,7 @@ var log = new Logger(__filename);
  * Periodically loads the app's HTML and checks if it links to new versions of the css and js files.
  */
 export default class AppVersion {
-    constructor(win=window) {
+    constructor(win = window) {
         this.window = win;
         this.listeners = [];
         this.linkSrcs = [];
