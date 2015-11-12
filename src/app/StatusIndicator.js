@@ -1,4 +1,5 @@
-import React from "react/addons";
+import React from "react";
+import PureRenderMixin from "react-addons-pure-render-mixin";
 import _ from "lodash";
 import moment from "moment";
 import Mixins from "../util/Mixins";
@@ -74,4 +75,4 @@ export default class StatusIndicator extends React.Component {
     }
 }
 
-Mixins.add(StatusIndicator.prototype, [React.addons.PureRenderMixin]);
+Mixins.add(StatusIndicator.prototype, [PureRenderMixin]);

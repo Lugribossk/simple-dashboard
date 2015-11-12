@@ -1,4 +1,5 @@
 import React from "react";
+import PureRenderMixin from "react-addons-pure-render-mixin";
 import _ from "lodash";
 import {Col} from "react-bootstrap";
 import Piecon from "piecon";
@@ -78,4 +79,4 @@ export default class StatusDashboard extends React.Component {
     }
 }
 
-Mixins.add(StatusDashboard.prototype, [React.addons.PureRenderMixin]);
+Mixins.add(StatusDashboard.prototype, [PureRenderMixin]);

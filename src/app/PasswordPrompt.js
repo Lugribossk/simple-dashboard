@@ -1,4 +1,6 @@
-import React from "react/addons";
+import React from "react";
+import PureRenderMixin from "react-addons-pure-render-mixin";
+import LinkedStateMixin from "react-addons-linked-state-mixin";
 import {Glyphicon, Modal, Input, Button, Panel} from "react-bootstrap";
 import Mixins from "../util/Mixins";
 
@@ -75,4 +77,4 @@ export default class PasswordPrompt extends React.Component {
     }
 }
 
-Mixins.add(PasswordPrompt.prototype, [React.addons.PureRenderMixin, React.addons.LinkedStateMixin]);
+Mixins.add(PasswordPrompt.prototype, [PureRenderMixin, LinkedStateMixin]);

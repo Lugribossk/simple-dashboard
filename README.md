@@ -6,18 +6,14 @@
 A straightforward dashboard for showing an overview of the status of servers and infrastructure.
 Runs entirely in the browser as static Javascript so it can be hosted easily without needing to set up and maintain yet another server. 
 
+![Example](/docs/example.jpg)
+
 ## Configuration
-
-Name|Description
----|---
-title|TODO
-sources|.
-panels|.
-
-### Example
+The dashboard is configured via a JSON config file that defines where to get status information from.
 
 ```json
 {
+    "title": "Infrastructure status",
     "sources": [{
         "type": "statusio",
         "title": "Tutum",
@@ -37,8 +33,13 @@ panels|.
         "adminPath": "http://localhost:9090/admin"
     }]
 }
-
 ```
+
+Name|Description
+---|---
+title|Title to show at the top of the dashboard. Optional.
+sources|List of status sources to show and their individual configurations.
+panels|List of panels that split the screen
 
 ## Status sources
 
@@ -74,7 +75,7 @@ type||`github-branches`
 owner||Repository owner name, i.e. the user or organization the repo is located under.
 repo||Repository name.
 token||Personal access token.
-showStatus|false|Also show build status.
+showStatus|false|Also show build status. The build status is only set if an external system pushes it to Github, e.g. as part of a continuous integration setup with Travis or CircleCI.
 
 ### Static message
 A static message.

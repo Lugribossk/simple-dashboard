@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "bluebird": "3.0.5",
+    "bluebird": "2.9.34",
     "bootstrap": "3.3.5",
     "bootswatch": "3.3.5",
     "immutable": "3.7.5",
