@@ -1,5 +1,6 @@
 import DropwizardHealthcheck from "./DropwizardHealthcheck";
 import GithubBranches from "./GithubBranches";
+import Loggly from "./Loggly";
 import Message from "./Message";
 import RssAws from "./RssAws";
 import StatusCode from "./StatusCode";
@@ -12,6 +13,7 @@ import VsoBuild from "./VsoBuild";
 export default [
     DropwizardHealthcheck,
     GithubBranches,
+    Loggly,
     Message,
     RssAws,
     StatusCode,
