@@ -26,6 +26,11 @@ export default class VsoBranches extends VsoBase {
     }
 
     getStatus() {
+        let defaultStatus = super.getStatus();
+        if (defaultStatus) {
+            return defaultStatus;
+        }
+
         return Promise.all([this.fetchBranches(), this.fetchBuilds(), this.fetchPullRequests()])
             .catch(() => {
                 return {
@@ -39,10 +44,10 @@ export default class VsoBranches extends VsoBase {
             })
             .spread((branches, builds, prs) => {
                 return _.map(branches, branch => {
-                    var status = this.createStatus(builds, branch);
+                    let status = this.createStatus(builds, branch);
                     status.title = branch;
 
-                    var branchPr = _.find(prs, {sourceRefName: "refs/heads/" + branch});
+                    let branchPr = _.find(prs, {sourceRefName: "refs/heads/" + branch});
                     if (branchPr) {
                         status.messages.push({
                             name: "Pull request: " + branchPr.title,

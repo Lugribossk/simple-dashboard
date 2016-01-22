@@ -7,6 +7,11 @@ export default class VsoBuild extends VsoBase {
     }
 
     getStatus() {
+        let defaultStatus = super.getStatus();
+        if (defaultStatus) {
+            return defaultStatus;
+        }
+
         return this.fetchBuilds()
             .catch(() => {
                 return {
