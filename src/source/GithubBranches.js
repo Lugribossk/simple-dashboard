@@ -110,6 +110,16 @@ export default class GithubBranches extends Source {
     }
 
     getStatus() {
+        if (!this.owner || !this.repo || !this.token) {
+            return Promise.resolve({
+                title: this.title,
+                status: "warning",
+                messages: [{
+                    message: "Credentials not configured."
+                }]
+            });
+        }
+
         return Promise.all([this.fetchBranches(), this.fetchPullRequests()])
             .catch(() => {
                 return {

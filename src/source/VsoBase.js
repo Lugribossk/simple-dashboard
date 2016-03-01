@@ -14,7 +14,15 @@ export default class VsoBase extends Source {
     }
 
     getStatus() {
-        throw new Error("Not implemented.");
+        if (!this.account || !this.project || !this.username || !this.password) {
+            return Promise.resolve({
+                title: this.title,
+                status: "warning",
+                messages: [{
+                    message: "Credentials not configured."
+                }]
+            });
+        }
     }
 
     getBaseUrl() {

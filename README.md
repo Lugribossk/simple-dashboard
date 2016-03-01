@@ -77,6 +77,19 @@ repo||Repository name.
 token||Personal access token.
 showStatus|false|Also show build status. The build status is only set if an external system pushes it to Github, e.g. as part of a continuous integration setup with Travis or CircleCI.
 
+### Loggly
+Number of WARN and ERROR log messages in [Loggly](http://www.loggly.com).
+
+Name|Default|Description
+---|---|---
+type||`loggly`
+username||Username.
+password||Password.
+account||Account name, from the Loggly URL.
+tag||A tag to filter by, e.g. to separate logs from different environments.
+from|`-24h`|Count log messages newer than this.
+
+
 ### Static message
 A static message.
 
@@ -97,7 +110,7 @@ id||ID of the status feed to follow as seen in the RSS link, e.g. `ec2-us-east-1
 ### Response status code
 Whether an arbitrary URL returned a successful status code. Any status code below 400 counts as successful.
 
-Check that the server is set up to allow cross-origin requests.
+Make sure that the server is set up to allow cross-origin requests.
 
 Name|Default|Description
 ---|---|---
@@ -112,10 +125,10 @@ Name|Default|Description
 ---|---|---
 type||`statusio`
 id||Status.io's ID for the service you want to check, e.g. `536beeeafd254d60080002ae` for Tutum. There doesn't seem to be an easy way to find this yourself, but you can probably get it by asking customer support for the service you want to check. 
-link||Link to the service's status page, e.g. ``http://status.tutum.co`.
+link||Link to the service's status page, e.g. `http://status.tutum.co`.
 
-### Tutum.co service
-Status of a [Tutum.co](http://tutum.co) service.
+### Tutum service
+Status of a [Tutum](http://tutum.co) service.
 
 Name|Default|Description
 ---|---|---
@@ -139,6 +152,8 @@ repoId|
 ### Visual Studio Online build
 Build status of the latest commit in a Visual Studio Online Git repository branch.
 
+Name|Default|Description
+---|---|---
 type||`vso-build`
 branch|master|Branch to show status for.
 
