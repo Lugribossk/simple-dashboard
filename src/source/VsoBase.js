@@ -35,27 +35,27 @@ export default class VsoBase extends Source {
     }
 
     createStatus(builds, branchName) {
-        var link;
-        var status;
-        var message;
-        var progress;
+        let link;
+        let status;
+        let message;
+        let progress;
 
-        var branchBuilds = _.filter(builds, {sourceBranch: "refs/heads/" + branchName});
+        let branchBuilds = _.filter(builds, {sourceBranch: "refs/heads/" + branchName});
 
         if (branchBuilds.length === 0) {
             status = "info";
             message = "No builds found for branch '" + branchName + "'";
         } else {
-            var build = branchBuilds[0];
+            let build = branchBuilds[0];
             link = build._links.web.href;
 
-            var finishTime = moment(build.finishTime).fromNow();
+            let finishedAgo = moment(build.finishTime).fromNow();
             if (build.status !== "completed") {
                 status = "info";
                 message = "Build in progress";
 
-                var start = moment(build.startTime);
-                var avg = BuildUtils.getAverageDuration(this.getDurations(builds, branchName));
+                let start = moment(build.startTime);
+                let avg = BuildUtils.getEstimatedDuration(this.getDurations(builds, branchName));
                 progress = {
                     percent: now => BuildUtils.getEstimatedPercentComplete(now, start, avg),
                     remaining: now => BuildUtils.getEstimatedTimeRemaining(now, start, avg)
@@ -63,16 +63,16 @@ export default class VsoBase extends Source {
             } else {
                 if (build.result === "partiallySucceeded") {
                     status = "warning";
-                    message = "Partially succeeded " + finishTime;
+                    message = "Partially succeeded " + finishedAgo;
                 } else if (build.result === "succeeded") {
                     status = "success";
-                    message = "Built " + finishTime;
+                    message = "Built " + finishedAgo;
                 } else if (build.result === "canceled") {
                     status = "danger";
-                    message = "Canceled " + finishTime;
+                    message = "Canceled " + finishedAgo;
                 } else {
                     status = "danger";
-                    message = "Failed " + finishTime;
+                    message = "Failed " + finishedAgo;
                 }
             }
         }
@@ -89,19 +89,24 @@ export default class VsoBase extends Source {
     }
 
     getDurations(builds, branchName) {
+        let targetBuilds = builds;
         // If there are any builds with the target branch then only use those.
-        var branchBuilds = _.filter(builds, {sourceBranch: "refs/heads/" + branchName});
-        if (branchBuilds.length === 0) {
-            branchBuilds = builds;
+        let branchBuilds = _.filter(builds, {sourceBranch: "refs/heads/" + branchName});
+        if (branchBuilds.length > 0) {
+            targetBuilds = branchBuilds;
+        }
+        let successBuilds = _.filter(targetBuilds, {status: "success"});
+        if (successBuilds.length > 0) {
+            targetBuilds = successBuilds;
         }
 
-        return _.filter(_.map(branchBuilds, build => {
-            if (!build.startTime || !build.finishTime) {
+        return _.filter(_.map(targetBuilds, ({startTime, finishTime}) => {
+            if (!startTime || !finishTime) {
                 return null;
             }
 
-            var start = moment(build.startTime);
-            var finish = moment(build.finishTime);
+            let start = moment(startTime);
+            let finish = moment(finishTime);
             return moment.duration(finish.diff(start));
         }));
     }

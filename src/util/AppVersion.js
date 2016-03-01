@@ -44,12 +44,12 @@ export default class AppVersion {
                 var changed = false;
 
                 _.forEach(RegExps.getAllMatches(/<link href=".*?\/(.*?)"/g, data.text), name => {
-                    if (!_.contains(this.linkSrcs, name)) {
+                    if (!_.includes(this.linkSrcs, name)) {
                         changed = true;
                     }
                 });
                 _.forEach(RegExps.getAllMatches(/<script src=".*?\/(.*?)"/g, data.text), name => {
-                    if (!_.contains(this.scriptSrcs, name)) {
+                    if (!_.includes(this.scriptSrcs, name)) {
                         changed = true;
                     }
                 });
@@ -62,7 +62,7 @@ export default class AppVersion {
                 }
                 return changed;
             })
-            .catch(() => {});
+            .catch(() => false);
     }
 
     static reloadImmediatelyOnChange(win) {

@@ -3,6 +3,7 @@ import _ from "lodash";
 import jsdom from "jsdom";
 import expect from "unexpected";
 import unexpectedSinon from "unexpected-sinon";
+import unexpectedMoment from "unexpected-moment";
 import sinon from "sinon";
 
 // Set up expected browser globals.
@@ -14,6 +15,7 @@ global.navigator = {
 
 // Set up Unexpected plugins (on the actual unexpected instance, so they show up when it is imported by other modules).
 expect.installPlugin(unexpectedSinon);
+expect.installPlugin(unexpectedMoment);
 
 // Automatically restore Sinon stubs after tests end.
 var oldWrap = sinon.wrapMethod;

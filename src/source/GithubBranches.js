@@ -66,7 +66,7 @@ export default class GithubBranches extends Source {
                 } else if (latestStatus.state === "pending") {
                     status.status = "info";
                     var start = moment(latestStatus.created_at);
-                    var avg = BuildUtils.getAverageDuration(this.getDurations(statuses));
+                    var avg = BuildUtils.getEstimatedDuration(this.getDurations(statuses));
                     status.progress = {
                         percent: now => BuildUtils.getEstimatedPercentComplete(now, start, avg),
                         remaining: now => BuildUtils.getEstimatedTimeRemaining(now, start, avg)

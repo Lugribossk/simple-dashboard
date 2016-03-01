@@ -58,6 +58,7 @@
     "sinon": "1.17.2",
     "style-loader": "0.13.0",
     "unexpected": "10.1.0",
+    "unexpected-moment": "1.0.2",
     "unexpected-sinon": "8.0.0",
     "url-loader": "0.5.6",
     "webpack": "1.12.4",
