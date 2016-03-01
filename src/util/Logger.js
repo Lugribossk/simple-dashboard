@@ -21,6 +21,7 @@ export default class Logger {
         this.name = name;
         this.setLogLevel(defaultLogLevel);
         loggers[name] = this;
+        return this;
     }
 
     setLogLevel(level) {
@@ -39,7 +40,7 @@ export default class Logger {
     static _extractFilename(filename) {
         if (_.endsWith(filename, ".js")) {
             var sep;
-            if (_.contains(filename, "/")) {
+            if (_.includes(filename, "/")) {
                 sep = "/";
             } else {
                 sep = "\\";

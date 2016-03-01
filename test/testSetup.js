@@ -1,4 +1,5 @@
 /*global global*/
+import _ from "lodash";
 import jsdom from "jsdom";
 import expect from "unexpected";
 import unexpectedSinon from "unexpected-sinon";
@@ -24,7 +25,7 @@ sinon.wrapMethod = function (...args) {
     if (!afterSetup) {
         // Delay setting up afterEach since it is not yet defined when this module is run.
         afterEach(() => {
-            wrappeds.forEach(wrapped => {
+            _.forEach(wrappeds, wrapped => {
                 wrapped.restore();
             });
             wrappeds = [];

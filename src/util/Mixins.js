@@ -43,7 +43,7 @@ export default {
         // (There's no way to resolve duplicates in this case as we do not know the intention or return value of them.)
         _.forEach(mixins, mixin => {
             _.forEach(mixin, (method, methodName) => {
-                if (!_.contains(lifecycleMethods, methodName)) {
+                if (!_.includes(lifecycleMethods, methodName)) {
                     if (context[methodName]) {
                         throw new Error("Context being mixed into already has method named " + methodName);
                     }

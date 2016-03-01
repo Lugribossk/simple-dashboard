@@ -24,7 +24,7 @@ request.Request.prototype.end = function (callback) {
     this.query({[this.callbackQueryName]: this.callbackFunctionName});
 
     var queryString = request.serializeObject(this._query.join("&"));
-    var url = this.url + (_.contains(this.url, "?") ? "&" : "?") + queryString;
+    var url = this.url + (_.includes(this.url, "?") ? "&" : "?") + queryString;
 
     this.scriptElement = document.createElement("script");
     this.scriptElement.src = url;

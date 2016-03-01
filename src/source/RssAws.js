@@ -15,11 +15,11 @@ export default class RssAws extends RssBase {
 
                 var latestEntry = data.responseData.feed.entries[0];
 
-                if (_.contains(latestEntry.title, "Service is operating normally") ||
-                    _.contains(latestEntry.content, "service is operating normally")) {
+                if (_.includes(latestEntry.title, "Service is operating normally") ||
+                    _.includes(latestEntry.content, "service is operating normally")) {
                     status = "success";
                 } else {
-                    if (_.contains(latestEntry.title, "Informational message")) {
+                    if (_.includes(latestEntry.title, "Informational message")) {
                         status = "warning";
                     } else {
                         status = "danger";

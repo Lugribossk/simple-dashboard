@@ -15,6 +15,7 @@
     "requireBlocksOnNewline": true,
     "requireCamelCaseOrUpperCaseIdentifiers": "ignoreProperties",
     "requireCapitalizedConstructors": true,
+    "requireCapitalizedConstructorsNew": true,
     "requireCommaBeforeLineBreak": true,
     "requireCurlyBraces": true,
     "requireDotNotation": true,
@@ -29,9 +30,6 @@
     "validateIndentation": 4,
     "validateParameterSeparator": ", ",
     "validateQuoteMarks": "\"",
-
-    //"disallowParenthesesAroundArrowParam": true,
-    //"requireArrowFunctions": true,
 
     "esnext": true
 }

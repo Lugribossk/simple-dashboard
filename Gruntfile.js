@@ -1,12 +1,15 @@
 /*global module, require, process*/
 /*eslint prefer-arrow-callback: 0, no-invalid-this: 0, object-curly-spacing: 0*/
 var webpack = require("webpack");
+var _ = require("lodash");
 var HtmlPlugin = require("html-webpack-plugin");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = function (grunt) {
     grunt.initConfig({});
+
+    var pkg = grunt.file.readJSON("./package.json");
 
     var staticPath = "static/";
     grunt.loadNpmTasks("grunt-webpack");
@@ -15,7 +18,7 @@ module.exports = function (grunt) {
             context: "src",
             entry: {
                 main: "./main.js",
-                vendor: ["bluebird", "lodash", "react", "react-bootstrap", "superagent-bluebird-promise", "immutable", "moment"]
+                vendor: _.without(_.keys(pkg.dependencies), "bootstrap", "bootswatch")
             },
             output: {
                 path: "target/dist",
@@ -24,12 +27,26 @@ module.exports = function (grunt) {
                 publicPath: "../"
             },
             module: {
-                loaders: [
-                    { test: /\.js$/, exclude: /node_modules/, loader: "babel?cacheDirectory&optional[]=runtime"},
-                    { test: /\.css$/, loader: ExtractTextPlugin.extract("style", "css")},
-                    { test: /\.less$/, loader: ExtractTextPlugin.extract("style", "css!less")},
-                    { test: /\.(png|jpg|woff2?|ttf|eot|svg)$/, loader: "file?name=" + staticPath + "[name]-[hash].[ext]" }
-                ]
+                loaders: [{
+                    loader: "babel",
+                    test: /\.js$/,
+                    exclude: /node_modules/,
+                    query: {
+                        cacheDirectory: true
+                    }
+                }, {
+                    loader: ExtractTextPlugin.extract("style", "css"),
+                    test: /\.css$/
+                }, {
+                    loader: ExtractTextPlugin.extract("style", "css!less"),
+                    test: /\.less$/
+                }, {
+                    loader: "file",
+                    test: /\.(png|jpg|woff2?|ttf|eot|svg)$/,
+                    query: {
+                        name: staticPath + "[name]-[hash].[ext]"
+                    }
+                }]
             },
             plugins: [
                 // Keep the same module order between builds so the output file stays the same if there are no changes.
@@ -53,7 +70,8 @@ module.exports = function (grunt) {
                         warnings: false
                     }
                 }),
-                new CompressionPlugin()
+                new CompressionPlugin(),
+                new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
             ],
             node: {
                 __filename: true
@@ -63,7 +81,7 @@ module.exports = function (grunt) {
     });
 
     grunt.config.set("webpack-dev-server", {
-        options: {
+        start: {
             webpack: {
                 context: "src",
                 entry: [
@@ -76,34 +94,58 @@ module.exports = function (grunt) {
                     filename: "main.js"
                 },
                 module: {
-                    loaders: [
-                        { test: /\.js$/, exclude: /node_modules/, loaders: ["react-hot", "babel?cacheDirectory&optional[]=runtime"]},
-                        { test: /\.css$/, loader: "style!css"},
-                        { test: /\.less$/, loader: "style!css!less"},
-                        { test: /\.(png|jpg|woff2?|ttf|eot|svg)$/, loader: "file?name=[name]-[hash].[ext]" }
-                    ]
+                    loaders: [{
+                        loader: "babel",
+                        test: /\.js$/,
+                        exclude: /node_modules/,
+                        query: {
+                            cacheDirectory: true,
+                            plugins: [["react-transform", {
+                                transforms: [{
+                                    transform: "react-transform-hmr",
+                                    imports: ["react"],
+                                    locals: ["module"]
+                                }, {
+                                    transform: "react-transform-catch-errors",
+                                    imports: ["react", "redbox-react"]
+                                }]
+                            }]]
+                        }
+                    }, {
+                        loader: "style!css",
+                        test: /\.css$/
+                    }, {
+                        loader: "style!css!less",
+                        test: /\.less$/
+                    }, {
+                        loader: "file",
+                        test: /\.(png|jpg|woff2?|ttf|eot|svg)$/,
+                        query: {
+                            name: "name=[name]-[hash].[ext]"
+                        }
+                    }]
                 },
                 plugins: [
                     new HtmlPlugin({
                         template: "src/index.html"
                     }),
-                    new webpack.HotModuleReplacementPlugin()
+                    new webpack.HotModuleReplacementPlugin(),
+                    new webpack.DefinePlugin({
+                        "process.env": {
+                            NODE_ENV: JSON.stringify("development")
+                        }
+                    })
                 ],
                 node: {
                     __filename: true
                 },
                 watch: true,
-                keepalive: true
+                keepalive: true,
+                devtool: "cheap-module-eval-source-map"
             },
             publicPath: "/",
-            hot: true
-        },
-        start: {
-            keepAlive: true,
-            webpack: {
-                devtool: "cheap-module-source-map"
-                //debug: true
-            }
+            hot: true,
+            keepAlive: true
         }
     });
 
@@ -153,7 +195,7 @@ module.exports = function (grunt) {
     grunt.config.set("mochaTest", {
         options: {
             require: [
-                "babel-core/register",
+                "test/es6Setup",
                 "test/testSetup"
             ]
         },
@@ -168,28 +210,6 @@ module.exports = function (grunt) {
             },
             src: testSrc
         }
-    });
-
-    grunt.registerTask("coverage", "Generate test coverage report.", function () {
-        var istanbulOptions = ["cover", "--root", "./src", "--dir", "./target/coverage", "./node_modules/mocha/bin/_mocha"];
-        var mochaOptions = ["--require", "babel-core/register", "--require", "test/testSetup", "--require", "test/loadUntestedFiles", "--recursive", "./test"];
-
-        var done = this.async();
-        grunt.util.spawn({
-            cmd: "node",
-            args: ["./node_modules/istanbul/lib/cli"].concat(istanbulOptions).concat(["--"]).concat(mochaOptions),
-            opts: {
-                env: process.env,
-                cwd: process.cwd(),
-                stdio: "inherit"
-            }
-        }, function (err) {
-            if (err) {
-                grunt.fail.warn(err);
-                return;
-            }
-            done();
-        });
     });
 
     grunt.loadNpmTasks("grunt-contrib-clean");
