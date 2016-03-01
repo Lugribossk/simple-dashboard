@@ -27,16 +27,6 @@ export default class VsoBranches extends VsoBase {
 
     getStatus() {
         return Promise.all([this.fetchBranches(), this.fetchBuilds(), this.fetchPullRequests()])
-            .catch(() => {
-                return {
-                    title: this.title,
-                    link: this.getBaseUrl() + this.project + "/_build",
-                    status: "danger",
-                    messages: [{
-                        message: "No response from API"
-                    }]
-                };
-            })
             .spread((branches, builds, prs) => {
                 return _.map(branches, branch => {
                     var status = this.createStatus(builds, branch);
@@ -53,6 +43,16 @@ export default class VsoBranches extends VsoBase {
 
                     return status;
                 });
+            })
+            .catch(() => {
+                return {
+                    title: this.title,
+                    link: this.getBaseUrl() + this.project + "/_build",
+                    status: "danger",
+                    messages: [{
+                        message: "No response from API"
+                    }]
+                };
             });
     }
 }
