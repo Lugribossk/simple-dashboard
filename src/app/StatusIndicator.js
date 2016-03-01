@@ -49,7 +49,7 @@ export default class StatusIndicator extends React.Component {
 
         var remaining = this.props.progress.remaining(this.state.now);
         if (remaining) {
-            var positiveRemaining = Math.max(remaining.asMinutes(), 0);
+            var positiveRemaining = Math.ceil(Math.max(remaining.asMinutes(), 1));
             label = positiveRemaining + " minute" + (positiveRemaining === 1 ? "" : "s") + " remaining";
         }
         return (

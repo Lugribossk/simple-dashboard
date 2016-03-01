@@ -7,7 +7,7 @@ export default {
             return null;
         }
 
-        return average.subtract(now.diff(startTime));
+        return moment.duration(average.asMilliseconds()).subtract(now.diff(startTime));
     },
 
     getEstimatedPercentComplete(now, startTime, average) {
