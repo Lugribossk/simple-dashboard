@@ -62,7 +62,7 @@ export default class DockerCloudService extends Source {
 
             return {
                 title: this.title,
-                link: "https://cloud.docker.com/container/service/show/" + this.id + "/",
+                link: "https://cloud.docker.com/container/service/" + this.id + "/show",
                 status: status,
                 messages: [{
                     message: message
