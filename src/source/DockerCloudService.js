@@ -2,8 +2,8 @@ import Promise from "bluebird";
 import request from "superagent-bluebird-promise";
 import Source from "./Source";
 
-// https://docs.tutum.co/v2/api/?http#service
-export default class TutumService extends Source {
+// https://docs.docker.com/apidocs/docker-cloud/
+export default class DockerCloudService extends Source {
     constructor(data, util) {
         super(data);
         this.id = data.id;
@@ -12,8 +12,8 @@ export default class TutumService extends Source {
     }
 
     fetchData() {
-        return request.get("https://dashboard.tutum.co/api/v1/service/" + this.id + "/")
-            .set("Authorization", "ApiKey " + this.username + ":" + this.apiKey)
+        return request.get("https://cloud.docker.com/api/app/v1/service/" + this.id + "/")
+            .auth(this.username, this.apiKey)
             .promise()
             .catch(() => null);
     }
@@ -30,28 +30,25 @@ export default class TutumService extends Source {
         }
 
         return this.fetchData().then(response => {
-            var status = null;
-            var message = "";
+            let status = null;
+            let message = "";
 
             if (!response || !response.body) {
                 status = "danger";
                 message = "No response from API";
             } else {
-                var data = response.body;
-                var state = data.state;
+                let {state, target_num_containers: target, current_num_containers: current, synchronized} = response.body;
 
                 if (state === "Redeploying") {
                     status = "info";
-                    message = "Redeploying"; // TODO get tag info from image_tag endpoint
+                    message = "Redeploying";
 
                 } else if (state === "Scaling") {
                     status = "info";
-                    var target = data.target_num_containers;
-                    var current = data.current_num_containers;
                     message = "Scaling from " + current + " containers to " + target + ".";
 
                 } else if (state === "Running") {
-                    if (!data.synchronized) {
+                    if (!synchronized) {
                         status = "warning";
                         message = "Service definition not synchronized with containers.";
                     } else {
@@ -65,7 +62,7 @@ export default class TutumService extends Source {
 
             return {
                 title: this.title,
-                link: "https://dashboard.tutum.co/container/service/show/" + this.id + "/",
+                link: "https://cloud.docker.com/container/service/show/" + this.id + "/",
                 status: status,
                 messages: [{
                     message: message
@@ -75,4 +72,4 @@ export default class TutumService extends Source {
     }
 }
 
-TutumService.type = "tutum-service";
+DockerCloudService.type = "docker-cloud-service";

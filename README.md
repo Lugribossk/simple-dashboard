@@ -52,6 +52,16 @@ type||Which kind of source this is, must be one of the types listed below, e.g. 
 title||Title displayed on status indicator, e.g. `Production Healthcheck`.
 interval|60|Number of seconds between status checks.
 
+### Docker Cloud service
+Status of a [Docker Cloud](https://cloud.docker.com/) (formerly Tutum) service.
+
+Name|Default|Description
+---|---|---
+type||`docker-cloud-service`
+id||Service ID.
+username||Docker Cloud account username.
+apiKey||Docker Cloud account API key.
+
 ### Dropwizard healthcheck
 The status of a [Dropwizard](http://www.dropwizard.io) service's [health checks](http://www.dropwizard.io/manual/core.html#health-checks).
 
@@ -126,16 +136,6 @@ Name|Default|Description
 type||`statusio`
 id||Status.io's ID for the service you want to check, e.g. `536beeeafd254d60080002ae` for Tutum. There doesn't seem to be an easy way to find this yourself, but you can probably get it by asking customer support for the service you want to check. 
 link||Link to the service's status page, e.g. `http://status.tutum.co`.
-
-### Tutum service
-Status of a [Tutum](http://tutum.co) service.
-
-Name|Default|Description
----|---|---
-type||`tutum-service`
-id||Service ID.
-username||Tutum account username.
-apiKey||Tutum account API key.
 
 ### Visual Studio Online branches
 All the branches of a Visual Studio Online Git repository. Also shows build status of the latest commit in each branch and pull requests to master.
