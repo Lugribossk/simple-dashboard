@@ -1,9 +1,9 @@
 import _ from "lodash";
 import moment from "moment";
 import Promise from "bluebird";
-import VsoBase from "./VsoBase";
+import VstsBase from "./VstsBase";
 
-export default class VsoBranches extends VsoBase {
+export default class VstsBranches extends VstsBase {
     constructor(data, util) {
         super(data, util);
         this.repoId = data.repoId;
@@ -62,4 +62,4 @@ export default class VsoBranches extends VsoBase {
     }
 }
 
-VsoBranches.type = "vso-branches";
+VstsBranches.type = "vsts-branches";

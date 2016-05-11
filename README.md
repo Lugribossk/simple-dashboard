@@ -16,9 +16,9 @@ The dashboard is configured via a JSON config file that defines where to get sta
     "title": "Infrastructure status",
     "sources": [{
         "type": "statusio",
-        "title": "Tutum",
-        "link": "http://status.tutum.co",
-        "id": "536beeeafd254d60080002ae"
+        "title": "Docker",
+        "link": "http://status.docker.com",
+        "id": "533c6539221ae15e3f000031"
     }, {
         "type": "rss-aws",
         "title": "CloudFront",
@@ -48,7 +48,7 @@ Options for all the status sources.
 
 Name|Default|Description
 ---|---|---
-type||Which kind of source this is, must be one of the types listed below, e.g. `status-code` or `vso-branches`.
+type||Which kind of source this is, must be one of the types listed below, e.g. `status-code` or `vsts-branches`.
 title||Title displayed on status indicator, e.g. `Production Healthcheck`.
 interval|60|Number of seconds between status checks.
 
@@ -71,7 +71,7 @@ TODO example.
 Name|Default|Description
 ---|---|---
 type||`dropwizard`
-adminPath|None|Path to the admin port for your service, e.g. `http://localhost:8081` for a local server with the default admin settings.
+adminPath||Path to the admin port for your service, e.g. `http://localhost:8081` for a local server with the default admin settings.
 
 ### GitHub branches
 All the branches of a GitHub repository. Also shows any open pull requests from those branches to master.
@@ -134,28 +134,30 @@ Status from a service dashboard hosted by [Status.io](http://status.io). Many we
 Name|Default|Description
 ---|---|---
 type||`statusio`
-id||Status.io's ID for the service you want to check, e.g. `536beeeafd254d60080002ae` for Tutum. There doesn't seem to be an easy way to find this yourself, but you can probably get it by asking customer support for the service you want to check. 
-link||Link to the service's status page, e.g. `http://status.tutum.co`.
+id||Status.io's ID for the service you want to check, e.g. `533c6539221ae15e3f000031` for Docker. There doesn't seem to be an easy way to find this yourself, but you can probably get it by asking customer support for the service you want to check.
+link||Link to the service's status page, e.g. `https://status.docker.com`.
 
-### Visual Studio Online branches
-All the branches of a Visual Studio Online Git repository. Also shows build status of the latest commit in each branch and pull requests to master.
+### Visual Studio Team Services branches
+Build status of the latest commit for all the branches in a Visual Studio Team Services Git repository. Also shows highlights branches with an open pull request to master.
 
 Name|Default|Description
 ---|---|---
-type||`vso-branches`
+type||`vsts-branches`
+repoId|ID of the repository, can be found in the URL in the control panel under Version Control.
+account|Account subdomain.
+project|Project name.
+token|[Personal Access Token](https://www.visualstudio.com/en-us/get-started/setup/use-personal-access-tokens-to-authenticate).
+
+### Visual Studio Team Services build
+Build status of the latest commit for a single branch in a Visual Studio Team Services Git repository.
+
+Name|Default|Description
+---|---|---
+type||`vsts-build`
+branch|master|Branch to show status for.
 account|
 project|
-username|
-password|
-repoId|
-
-### Visual Studio Online build
-Build status of the latest commit in a Visual Studio Online Git repository branch.
-
-Name|Default|Description
----|---|---
-type||`vso-build`
-branch|master|Branch to show status for.
+token|
 
 
 

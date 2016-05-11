@@ -6,8 +6,8 @@ import RssAws from "./RssAws";
 import StatusCode from "./StatusCode";
 import StatusIo from "./StatusIo";
 import DockerCloudService from "./DockerCloudService";
-import VsoBranches from "./VsoBranches";
-import VsoBuild from "./VsoBuild";
+import VstsBranches from "./VstsBranches";
+import VstsBuild from "./VstsBuild";
 
 // Register all Source subclasses so they can be instantiated from the configuration.
 export default [
@@ -19,6 +19,6 @@ export default [
     RssAws,
     StatusCode,
     StatusIo,
-    VsoBranches,
-    VsoBuild
+    VstsBranches,
+    VstsBuild
 ];

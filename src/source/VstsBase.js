@@ -4,17 +4,16 @@ import request from "superagent-bluebird-promise";
 import Source from "./Source";
 import BuildUtils from "../util/BuildUtils";
 
-export default class VsoBase extends Source {
+export default class VstsBase extends Source {
     constructor(data, util) {
         super(data);
         this.account = data.account;
         this.project = data.project;
-        this.username = data.username;
-        this.password = util.decrypt(data.password);
+        this.token = util.decrypt(data.token);
     }
 
     getStatus() {
-        if (!this.account || !this.project || !this.username || !this.password) {
+        if (!this.account || !this.project || !this.token) {
             return Promise.resolve({
                 title: this.title,
                 status: "warning",
@@ -32,14 +31,14 @@ export default class VsoBase extends Source {
 
     fetchBuilds() {
         return request.get(this.getBaseUrl() + this.project + "/_apis/build/builds")
-            .auth(this.username, this.password)
+            .auth("", this.token)
             .promise()
             .then(response => response.body.value);
     }
 
     fetchGitData(path) {
         return request.get(this.getBaseUrl() + "_apis/git/repositories/" + this.repoId + path)
-            .auth(this.username, this.password)
+            .auth("", this.token)
             .query("api-version=1.0");
     }
 

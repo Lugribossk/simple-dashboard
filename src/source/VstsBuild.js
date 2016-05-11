@@ -1,6 +1,6 @@
-import VsoBase from "./VsoBase";
+import VstsBase from "./VstsBase";
 
-export default class VsoBuild extends VsoBase {
+export default class VstsBuild extends VstsBase {
     constructor(data, util) {
         super(data, util);
         this.branch = data.branch || "master";
@@ -27,4 +27,4 @@ export default class VsoBuild extends VsoBase {
     }
 }
 
-VsoBuild.type = "vso-build";
+VstsBuild.type = "vsts-build";
