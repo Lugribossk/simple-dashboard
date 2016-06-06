@@ -1,5 +1,6 @@
 import Promise from "bluebird";
 import request from "superagent-bluebird-promise";
+import moment from "moment";
 import Source from "./Source";
 
 // https://docs.docker.com/apidocs/docker-cloud/
@@ -24,7 +25,7 @@ export default class DockerCloudService extends Source {
                 title: this.title,
                 status: "warning",
                 messages: [{
-                    message: "API key not configured."
+                    message: "API key not configured"
                 }]
             });
         }
@@ -37,7 +38,13 @@ export default class DockerCloudService extends Source {
                 status = "danger";
                 message = "No response from API";
             } else {
-                let {state, target_num_containers: target, current_num_containers: current, synchronized} = response.body;
+                let {
+                    state,
+                    target_num_containers: targetContainers,
+                    current_num_containers: currentContainers,
+                    synchronized,
+                    started_datetime: startedAt
+                } = response.body;
 
                 if (state === "Redeploying") {
                     status = "info";
@@ -45,14 +52,16 @@ export default class DockerCloudService extends Source {
 
                 } else if (state === "Scaling") {
                     status = "info";
-                    message = "Scaling from " + current + " containers to " + target + ".";
+                    message = "Scaling from " + currentContainers + " containers to " + targetContainers;
 
                 } else if (state === "Running") {
                     if (!synchronized) {
                         status = "warning";
-                        message = "Service definition not synchronized with containers.";
+                        message = "Service definition not synchronized with containers";
                     } else {
                         status = "success";
+                        // E.g. Mon, 13 Oct 2014 11:01:43 +0000
+                        message = "Started " + moment(startedAt, "ddd, D MMMM YYYY HH:mm:ss ZZ").fromNow();
                     }
                 } else {
                     status = "danger";
