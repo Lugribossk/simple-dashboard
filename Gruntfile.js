@@ -24,6 +24,7 @@ module.exports = function (grunt) {
                 path: "target/dist",
                 filename: staticPath + "main-[chunkhash].min.js",
                 // This is needed for the css file to have the right path to the fonts.
+                // TODO Fix this not working with the new version of the html plugin.
                 publicPath: "../"
             },
             module: {
@@ -53,7 +54,7 @@ module.exports = function (grunt) {
                 new webpack.optimize.OccurenceOrderPlugin(),
                 new webpack.optimize.CommonsChunkPlugin("vendor", staticPath + "vendor-[chunkhash].min.js"),
                 new HtmlPlugin({
-                    template: "src/index-build.html"
+                    template: "./index.html"
                 }),
                 new webpack.DefinePlugin({
                     "process.env": {
@@ -127,7 +128,7 @@ module.exports = function (grunt) {
                 },
                 plugins: [
                     new HtmlPlugin({
-                        template: "src/index.html"
+                        template: "./index.html"
                     }),
                     new webpack.HotModuleReplacementPlugin(),
                     new webpack.DefinePlugin({

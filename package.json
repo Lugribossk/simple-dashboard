@@ -43,7 +43,7 @@
     "grunt-jscs": "2.8.0",
     "grunt-mocha-test": "0.12.7",
     "grunt-webpack": "1.0.11",
-    "html-webpack-plugin": "1.6.2",
+    "html-webpack-plugin": "2.19.0",
     "jscs": "2.9.0",
     "jsdom": "9.0.0",
     "less": "2.7.1",
