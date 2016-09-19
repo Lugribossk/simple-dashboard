@@ -3,7 +3,7 @@ import VstsBase from "./VstsBase";
 export default class VstsBuild extends VstsBase {
     constructor(data, util) {
         super(data, util);
-        this.branch = data.branch || "master";
+        this.branch = data.branch || "refs/heads/master";
     }
 
     getStatus() {

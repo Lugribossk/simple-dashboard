@@ -4,6 +4,8 @@ import request from "superagent-bluebird-promise";
 import Source from "./Source";
 import BuildUtils from "../util/BuildUtils";
 
+let sanitize = name => name.replace(/refs\/heads\//g, "");
+
 export default class VstsBase extends Source {
     constructor(data, util) {
         super(data);
@@ -48,11 +50,11 @@ export default class VstsBase extends Source {
         let message;
         let progress;
 
-        let branchBuilds = _.filter(builds, {sourceBranch: "refs/heads/" + branchName});
+        let branchBuilds = _.filter(builds, {sourceBranch: branchName});
 
         if (branchBuilds.length === 0) {
             status = "info";
-            message = "No builds found for branch '" + branchName + "'";
+            message = "No builds found for branch '" + sanitize(branchName) + "'";
         } else {
             let build = branchBuilds[0];
             link = build._links.web.href;
@@ -99,7 +101,7 @@ export default class VstsBase extends Source {
     getDurations(builds, branchName) {
         let targetBuilds = builds;
         // If there are any builds with the target branch then only use those.
-        let branchBuilds = _.filter(builds, {sourceBranch: "refs/heads/" + branchName});
+        let branchBuilds = _.filter(builds, {sourceBranch: branchName});
         if (branchBuilds.length > 0) {
             targetBuilds = branchBuilds;
         }

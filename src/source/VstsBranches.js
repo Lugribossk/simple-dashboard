@@ -3,6 +3,8 @@ import moment from "moment";
 import Promise from "bluebird";
 import VstsBase from "./VstsBase";
 
+let sanitize = name => name.replace(/refs\/heads\//g, "");
+
 export default class VstsBranches extends VstsBase {
     constructor(data, util) {
         super(data, util);
@@ -12,7 +14,7 @@ export default class VstsBranches extends VstsBase {
     fetchBranches() {
         return this.fetchGitData("/refs/heads")
             .promise()
-            .then(response => _.map(response.body.value, value => value.name.substr(value.name.lastIndexOf("/") + 1)));
+            .then(response => _.map(response.body.value, value => value.name));
     }
 
     fetchPullRequests() {
@@ -35,9 +37,9 @@ export default class VstsBranches extends VstsBase {
             .spread((branches, builds, prs) => {
                 return _.map(branches, branch => {
                     let status = this.createStatus(builds, branch);
-                    status.title = branch;
+                    status.title = sanitize(branch);
 
-                    let branchPr = _.find(prs, {sourceRefName: "refs/heads/" + branch});
+                    let branchPr = _.find(prs, {sourceRefName: branch});
                     if (branchPr) {
                         status.messages.push({
                             name: "Pull request: " + branchPr.title,
