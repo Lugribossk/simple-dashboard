@@ -155,6 +155,7 @@ Name|Default|Description
 ---|---|---
 type||`vsts-build`
 branch|master|Branch to show status for.
+definition||Name of the build definition to show status for.
 account|
 project|
 token|

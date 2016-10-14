@@ -4,8 +4,6 @@ import request from "superagent-bluebird-promise";
 import Source from "./Source";
 import BuildUtils from "../util/BuildUtils";
 
-let sanitize = name => name.replace(/refs\/heads\//g, "");
-
 export default class VstsBase extends Source {
     constructor(data, util) {
         super(data);
@@ -31,6 +29,22 @@ export default class VstsBase extends Source {
         return "https://" + this.account + ".visualstudio.com/DefaultCollection/";
     }
 
+    getBuildQuery() {
+        let out = {};
+        if (this.branch) {
+            out.sourceBranch = this.branch;
+        }
+        if (this.definition) {
+            out.definition = {
+                name: this.definition
+            };
+        }
+        if (!this.branch && !this.definition) {
+            out.sourceBranch = "refs/heads/master";
+        }
+        return out;
+    }
+
     fetchBuilds() {
         return request.get(this.getBaseUrl() + this.project + "/_apis/build/builds")
             .auth("", this.token)
@@ -44,19 +58,19 @@ export default class VstsBase extends Source {
             .query("api-version=1.0");
     }
 
-    createStatus(builds, branchName) {
+    createStatus(builds, buildQuery) {
         let link;
         let status;
         let message;
         let progress;
 
-        let branchBuilds = _.filter(builds, {sourceBranch: branchName});
+        let targetBuilds = _.filter(builds, buildQuery);
 
-        if (branchBuilds.length === 0) {
+        if (targetBuilds.length === 0) {
             status = "info";
-            message = "No builds found for branch '" + sanitize(branchName) + "'";
+            message = "No builds found.";
         } else {
-            let build = branchBuilds[0];
+            let build = targetBuilds[0];
             link = build._links.web.href;
 
             let finishedAgo = moment(build.finishTime).fromNow();
@@ -65,7 +79,7 @@ export default class VstsBase extends Source {
                 message = "Build in progress";
 
                 let start = moment(build.startTime);
-                let avg = BuildUtils.getEstimatedDuration(this.getDurations(builds, branchName));
+                let avg = BuildUtils.getEstimatedDuration(this.getDurations(builds, buildQuery));
                 progress = {
                     percent: now => BuildUtils.getEstimatedPercentComplete(now, start, avg),
                     remaining: now => BuildUtils.getEstimatedTimeRemaining(now, start, avg)

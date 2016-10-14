@@ -2,19 +2,26 @@ import _ from "lodash";
 import moment from "moment";
 import Promise from "bluebird";
 import VstsBase from "./VstsBase";
+import Logger from "../util/Logger";
 
-let sanitize = name => name.replace(/refs\/heads\//g, "");
+let log = new Logger(__filename);
+
+let textToDuration = text => {
+    let match = /(\d+) ?(\w+)/.exec(text);
+    return moment.duration(_.parseInt(match[1]), match[2]);
+};
 
 export default class VstsBranches extends VstsBase {
     constructor(data, util) {
         super(data, util);
         this.repoId = data.repoId;
+        this.newerThan = data.newerThan;
     }
 
     fetchBranches() {
-        return this.fetchGitData("/refs/heads")
+        return this.fetchGitData("/stats/branches")
             .promise()
-            .then(response => _.map(response.body.value, value => value.name));
+            .then(response => response.body.value);
     }
 
     fetchPullRequests() {
@@ -35,11 +42,18 @@ export default class VstsBranches extends VstsBase {
 
         return Promise.all([this.fetchBranches(), this.fetchBuilds(), this.fetchPullRequests()])
             .spread((branches, builds, prs) => {
-                return _.map(branches, branch => {
-                    let status = this.createStatus(builds, branch);
-                    status.title = sanitize(branch);
+                let interestingBranches = branches;
+                if (this.newerThan) {
+                    interestingBranches = _.filter(branches, branch => {
+                        return moment(branch.commit.author.date).isAfter(moment().subtract(textToDuration(this.newerThan)));
+                    });
+                }
 
-                    let branchPr = _.find(prs, {sourceRefName: branch});
+                return _.map(interestingBranches, branch => {
+                    let status = this.createStatus(builds, {sourceBranch: "refs/heads/" + branch.name});
+                    status.title = branch.name;
+
+                    let branchPr = _.find(prs, {sourceRefName: "refs/heads/" + branch.name});
                     if (branchPr) {
                         status.messages.push({
                             name: "Pull request: " + branchPr.title,
@@ -51,7 +65,8 @@ export default class VstsBranches extends VstsBase {
                     return status;
                 });
             })
-            .catch(() => {
+            .catch(e => {
+                log.error(e);
                 return {
                     title: this.title,
                     link: this.getBaseUrl() + this.project + "/_build",

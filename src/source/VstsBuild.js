@@ -3,7 +3,8 @@ import VstsBase from "./VstsBase";
 export default class VstsBuild extends VstsBase {
     constructor(data, util) {
         super(data, util);
-        this.branch = data.branch || "refs/heads/master";
+        this.branch = data.branch;
+        this.definition = data.definition;
     }
 
     getStatus() {
@@ -13,7 +14,7 @@ export default class VstsBuild extends VstsBase {
         }
 
         return this.fetchBuilds()
-            .then(builds => this.createStatus(builds, this.branch))
+            .then(builds => this.createStatus(builds, this.getBuildQuery()))
             .catch(() => {
                 return {
                     title: this.title,
