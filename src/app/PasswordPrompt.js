@@ -1,7 +1,7 @@
 import React from "react";
 import PureRenderMixin from "react-addons-pure-render-mixin";
 import LinkedStateMixin from "react-addons-linked-state-mixin";
-import {Glyphicon, Modal, Input, Button, Panel} from "react-bootstrap";
+import {Glyphicon, Modal, FormControl, Button, Panel} from "react-bootstrap";
 import Mixins from "../util/Mixins";
 
 export default class PasswordPrompt extends React.Component {
@@ -45,7 +45,7 @@ export default class PasswordPrompt extends React.Component {
                 <p>The configuration file contains sensitive keys or passwords that have been encrypted.</p>
                 <p>Entering the password will unlock them, and save the password on this computer for the future.</p>
                 <form onSubmit={e => this.savePassword(e)}>
-                    <Input type="password" valueLink={this.linkState("password")} autoFocus />
+                    <FormControl type="password" valueLink={this.linkState("password")} autoFocus />
                     <Button bsStyle="primary" type="submit">Unlock</Button>
                 </form>
             </Modal.Body>

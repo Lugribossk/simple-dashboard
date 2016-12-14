@@ -1,6 +1,6 @@
 {
   "name": "simple-dashboard",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "bluebird": "3.3.5",
@@ -13,7 +13,7 @@
     "react": "15.0.2",
     "react-addons-linked-state-mixin": "15.0.2",
     "react-addons-pure-render-mixin": "15.0.2",
-    "react-bootstrap": "0.28.3",
+    "react-bootstrap": "0.30.7",
     "react-dom": "15.0.2",
     "sjcl": "1.0.3",
     "superagent": "1.8.3",
@@ -46,6 +46,7 @@
     "html-webpack-plugin": "2.19.0",
     "jscs": "2.9.0",
     "jsdom": "9.0.0",
+    "json-loader": "0.5.4",
     "less": "2.7.1",
     "less-loader": "2.2.3",
     "mocha": "2.4.5",

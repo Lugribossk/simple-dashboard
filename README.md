@@ -166,24 +166,31 @@ token|
 
 ### Credentials
 
-TODO
+If you put secrets such as Github tokens in the configuration file, then you should either encrupt the secret or only upload the dashboard to a non-public site.
+
+Values can be encrypted with `window.encrypt("password", "value")` which should then be placed in config.json as e.g. `{"token": {"encrypted": "..."}}`
 
 ### Cross-origin requests
 
 TODO
 
 
-
-## Development
-
-- TODO config file
+## Setup
+- Install NodeJS
 - `npm install -g grunt-cli`
 - `npm install`
+
+## Development
 - `grunt dev`
 - Open `localhost:8080`
+- The development configuration file will be loaded directly from `src/config.json`
 
 ### Adding new source types
 
 1. Create a new subclass of `Source` that overrides `getStatus()`.
 2. Define its type in the configuration file by adding it as a static property on your subclass named `type`. 
 3. Add it to the list in `SourceTypes`.
+
+## Building
+- `grunt build`
+- The files in `target/dist` can then be placed on a server. The real config.json configuration file you want to use should be placed next to index.html.

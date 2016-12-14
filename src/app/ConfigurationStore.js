@@ -1,3 +1,4 @@
+/*globals require, process */
 import _ from "lodash";
 import sjcl from "sjcl";
 import request from "superagent-bluebird-promise";
@@ -147,15 +148,23 @@ export default class ConfigurationStore extends CachingStore {
     }
 
     _fetchConfig() {
-        return request.get(this.configFileName)
-            .promise()
-            .catch(e => {
-                log.error("Configuration file '" + this.configFileName + "' not found.", e);
-                throw e;
-            })
-            .then(response => {
-                var config = JSON.parse(response.text);
-                this._parseConfig(config);
+        let jsonPromise;
+        if (process.env.NODE_ENV !== "production") {
+            jsonPromise = Promise.resolve(require("../config.json"));
+        } else {
+            jsonPromise = request.get(this.configFileName)
+                .promise()
+                .catch(e => {
+                    log.error("Configuration file '" + this.configFileName + "' not found.", e);
+                    throw e;
+                })
+                .then(response => {
+                    return JSON.parse(response.text);
+                });
+        }
+        return jsonPromise
+            .then(json => {
+                this._parseConfig(json);
             })
             .catch(e => log.error("Unable to load configuration", e));
     }

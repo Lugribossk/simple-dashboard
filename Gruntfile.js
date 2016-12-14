@@ -11,7 +11,6 @@ module.exports = function (grunt) {
 
     var pkg = grunt.file.readJSON("./package.json");
 
-    var staticPath = "static/";
     grunt.loadNpmTasks("grunt-webpack");
     grunt.config.set("webpack", {
         build: {
@@ -22,10 +21,7 @@ module.exports = function (grunt) {
             },
             output: {
                 path: "target/dist",
-                filename: staticPath + "main-[chunkhash].min.js",
-                // This is needed for the css file to have the right path to the fonts.
-                // TODO Fix this not working with the new version of the html plugin.
-                publicPath: "../"
+                filename: "main-[chunkhash].min.js"
             },
             module: {
                 loaders: [{
@@ -45,14 +41,17 @@ module.exports = function (grunt) {
                     loader: "file",
                     test: /\.(png|jpg|woff2?|ttf|eot|svg)$/,
                     query: {
-                        name: staticPath + "[name]-[hash].[ext]"
+                        name: "[name]-[hash].[ext]"
                     }
+                }, {
+                    loader: "json",
+                    test: /\.json$/
                 }]
             },
             plugins: [
                 // Keep the same module order between builds so the output file stays the same if there are no changes.
                 new webpack.optimize.OccurenceOrderPlugin(),
-                new webpack.optimize.CommonsChunkPlugin("vendor", staticPath + "vendor-[chunkhash].min.js"),
+                new webpack.optimize.CommonsChunkPlugin("vendor", "vendor-[chunkhash].min.js"),
                 new HtmlPlugin({
                     template: "./index.html"
                 }),
@@ -62,7 +61,7 @@ module.exports = function (grunt) {
                         NODE_ENV: JSON.stringify("production")
                     }
                 }),
-                new ExtractTextPlugin(staticPath + "main-[contenthash].css"),
+                new ExtractTextPlugin("main-[contenthash].css"),
                 new webpack.optimize.UglifyJsPlugin({
                     minimize: true,
                     // Remove all comments.
@@ -124,6 +123,9 @@ module.exports = function (grunt) {
                         query: {
                             name: "name=[name]-[hash].[ext]"
                         }
+                    }, {
+                        loader: "json",
+                        test: /\.json$/
                     }]
                 },
                 plugins: [
