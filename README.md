@@ -166,7 +166,7 @@ token|
 
 ### Credentials
 
-If you put secrets such as Github tokens in the configuration file, then you should either encrupt the secret or only upload the dashboard to a non-public site.
+If you put secrets such as Github tokens in the configuration file, then you should either encrypt the secret or only upload the dashboard to a non-public site.
 
 Values can be encrypted with `window.encrypt("password", "value")` which should then be placed in config.json as e.g. `{"token": {"encrypted": "..."}}`
 
