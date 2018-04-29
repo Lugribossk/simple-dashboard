@@ -15,7 +15,14 @@ export default class StatusCode extends Source {
 
     getStatus() {
         return this.fetchData()
-            .catch(response => {
+            .then(() => {
+                return {
+                    title: this.title,
+                    link: this.link,
+                    status: "success",
+                    messages: []
+                };
+            }).catch(response => {
                 return {
                     title: this.title,
                     link: this.link,
@@ -23,14 +30,6 @@ export default class StatusCode extends Source {
                     messages: [{
                         message: "Response had status code " + response.status
                     }]
-                };
-            })
-            .then(() => {
-                return {
-                    title: this.title,
-                    link: this.link,
-                    status: "success",
-                    messages: []
                 };
             });
     }
