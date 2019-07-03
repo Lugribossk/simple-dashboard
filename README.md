@@ -194,3 +194,14 @@ TODO
 ## Building
 - `grunt build`
 - The files in `target/dist` can then be placed on a server. The real config.json configuration file you want to use should be placed next to index.html.
+
+## Docker image
+You can run the app hosted in a docker image using `nginx` web server by simply building the image:
+
+`docker build -t simple-dashboard .`
+
+And running it:
+
+`docker run -d --name my-dashboard -p 8080:80 simple-dashboard`
+
+The app will be available on `http://localhost:8080`.
