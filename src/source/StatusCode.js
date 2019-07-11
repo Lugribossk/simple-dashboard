@@ -16,21 +16,24 @@ export default class StatusCode extends Source {
     getStatus() {
         return this.fetchData()
             .catch(response => {
+                return response
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    return {
+                        title: this.title,
+                        link: this.link,
+                        status: "success",
+                        messages: []
+                    };
+                }
                 return {
                     title: this.title,
                     link: this.link,
                     status: "danger",
                     messages: [{
-                        message: "Response had status code " + response.status
+                        message: "Request failed: " + response.message || 'unknown'
                     }]
-                };
-            })
-            .then(() => {
-                return {
-                    title: this.title,
-                    link: this.link,
-                    status: "success",
-                    messages: []
                 };
             });
     }
